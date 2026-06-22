@@ -6,7 +6,7 @@
 
 Tacit is an Obsidian plugin that surfaces **connections in your vault you didn't know existed**. Manual `[[wikilinks]]` only capture relationships you're already aware of — but the half-forgotten associations lurking at the edges of a years-long vault are often the most valuable.
 
-Tacit's design philosophy is rooted in Polanyi's theory of *tacit knowledge*:
+Tacit's design philosophy is rooted in Polanyi's theory of _tacit knowledge_:
 
 - **Passive emergence, not active querying.** Related notes appear quietly in the sidebar as you write. Connections surface from the periphery of your vision — no question required.
 - **Embrace forgetting and serendipity.** Serendipity mode deliberately surfaces old notes you've nearly forgotten — precisely where the most valuable tacit connections hide.
@@ -141,4 +141,4 @@ This project is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/lic
 - **NonCommercial**: May not be used for commercial purposes
 - **ShareAlike**: Derivative works must be released under the same license
 
-Copyright (c) 2024 nirodu &lt;nirodu1219@outlook.com&gt;
+Copyright (c) nirodu &lt;nirodu1219@outlook.com&gt;

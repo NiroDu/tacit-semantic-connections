@@ -141,4 +141,4 @@ npm run build
 - **非商业**：不可用于商业目的
 - **相同方式共享**：基于本项目的衍生作品必须使用相同协议发布
 
-Copyright (c) 2024 nirodu &lt;nirodu1219@outlook.com&gt;
+Copyright (c) nirodu &lt;nirodu1219@outlook.com&gt;
