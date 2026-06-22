@@ -1,119 +1,144 @@
-# Tacit — 语义连接
+# Tacit — Semantic Connections
 
-> "我们所知道的，远超过我们所能言说的。" — 迈克尔·波兰尼
+> 📖 [中文文档](./README-zh.md)
 
-Tacit 是一个 Obsidian 插件，用来浮现你笔记库中那些**你自己也不知道存在的连接**。手动 `[[wikilinks]]` 只能记录你意识到的关系；而那些潜藏在边缘、半遗忘的关联，才是一个写了多年的笔记库里最有价值的部分。
+> "We can know more than we can tell." — Michael Polanyi
 
-Tacit 的设计哲学源自波兰尼的"隐性知识"理论：
+Tacit is an Obsidian plugin that surfaces **connections in your vault you didn't know existed**. Manual `[[wikilinks]]` only capture relationships you're already aware of — but the half-forgotten associations lurking at the edges of a years-long vault are often the most valuable.
 
-- **被动浮现，而非主动查询**。相关笔记面板在你写作时安静地显示在侧边，连接从视觉边缘浮出，无需你先提出问题。
-- **拥抱遗忘与偶然**。Serendipity 模式会刻意把那些你几乎忘掉的旧笔记带回来——这些恰恰是最有价值的隐性连接。
-- **拖入即链接**。把结果拖进当前笔记，自动插入 `[[链接]]`，是把隐性连接变为显性记录的那个关键手势。
+Tacit's design philosophy is rooted in Polanyi's theory of *tacit knowledge*:
 
----
-
-## 功能
-
-- **相关笔记面板**（核心）：打开任意笔记，右侧自动显示语义最相关的笔记列表，无需任何操作
-- **Serendipity 模式**：降低相似性权重、提升旧笔记优先级，让遗忘的连接重新浮出
-- **固定面板**：Pin 当前结果，在多个笔记间游走时保持参照不变
-- **主动查找**：命令面板呼出搜索框，自然语言语义检索
-- **AI 问答**：基于你自己的笔记内容回答问题，所有来源均来自你的库，不引入外部信息
-- **Canvas 支持**：索引 `.canvas` 文件中的文字卡片，不遗漏任何内容
-- **本地优先**：默认使用本机 Ollama，数据不离开你的设备；也支持 OpenAI、OpenRouter、Gemini、任意 OpenAI 兼容接口
+- **Passive emergence, not active querying.** Related notes appear quietly in the sidebar as you write. Connections surface from the periphery of your vision — no question required.
+- **Embrace forgetting and serendipity.** Serendipity mode deliberately surfaces old notes you've nearly forgotten — precisely where the most valuable tacit connections hide.
+- **Drag to link.** Drag a result into your current note to automatically insert a `[[link]]`, making the implicit explicit.
 
 ---
 
-## 安装
+## Features
 
-目前尚未上架 Obsidian 社区插件市场，请手动安装：
-
-1. 前往 [Releases](https://github.com/nirodu/tacit/releases) 下载最新版本的 `main.js`、`manifest.json`、`styles.css`
-2. 在你的 Vault 下创建目录：`.obsidian/plugins/tacit/`
-3. 将三个文件放入该目录
-4. 在 Obsidian → 设置 → 第三方插件中启用 **Tacit — Semantic Connections**
+- **Related Notes Panel** (core): Open any note and instantly see a semantically ranked list of related notes in the right sidebar — no action needed
+- **Serendipity Mode**: Reduces similarity weighting and boosts older notes, letting forgotten connections resurface
+- **Pin Panel**: Pin the current results so your reference stays fixed as you navigate between notes
+- **Active Search**: Invoke the command palette to open a natural-language semantic search box
+- **Re-ranking** (optional): After vector retrieval, a dedicated Reranker re-scores and re-orders results for significantly improved relevance; supports Jina Reranker and Cohere Rerank
+- **AI Q&A**: Ask questions answered exclusively from your own notes — no external information introduced; all sources shown
+- **Canvas Support**: Indexes text cards inside `.canvas` files so nothing is missed
+- **Local-first**: Uses local Ollama by default — data never leaves your device; also supports OpenAI, OpenRouter, Gemini, and any OpenAI-compatible endpoint
 
 ---
 
-## 向量嵌入 Provider 配置
+## Installation
 
-插件需要一个嵌入模型（Embedding Model）将笔记转换为向量。支持以下 Provider：
+Not yet listed on the Obsidian Community Plugins marketplace. Install manually:
 
-### Ollama（本地，推荐）
+1. Go to [Releases](https://github.com/nirodu/tacit/releases) and download the latest `main.js`, `manifest.json`, and `styles.css`
+2. Create the directory `.obsidian/plugins/tacit/` inside your Vault
+3. Place the three files in that directory
+4. In Obsidian → Settings → Community Plugins, enable **Tacit — Semantic Connections**
 
-最简单的方式：数据完全留在本机，无需 API Key。
+---
 
-1. 安装 [Ollama](https://ollama.ai)
-2. 拉取一个嵌入模型，推荐中英文均衡的 `bge-m3`：
+## Embedding Provider Configuration
+
+The plugin requires an embedding model to convert notes into vectors. The following providers are supported:
+
+### Ollama (Local)
+
+The simplest option — data stays entirely on your machine, no API key required.
+
+1. Install [Ollama](https://ollama.ai)
+2. Pull an embedding model. `bge-m3` is recommended for balanced multilingual support:
    ```
    ollama pull bge-m3:latest
    ```
-3. 插件设置中选择 Provider → Ollama，从下拉菜单选择模型，点击"测试连接"
+3. In plugin settings, select Provider → Ollama, choose your model from the dropdown, and click "Test Connection"
 
-> 笔记主要为中文时，推荐 `bge-m3:latest` 或 `shaw/dmeta-embedding-zh`。
+> For primarily Chinese notes, `bge-m3:latest` or `shaw/dmeta-embedding-zh` is recommended.
 
 ### OpenAI
 
-设置中填入 API Key，选择模型（如 `text-embedding-3-small`）。
+Enter your API Key in settings and select a model (e.g., `text-embedding-3-small`).
 
 ### OpenRouter
 
-填入 OpenRouter API Key，选择支持嵌入的模型。
+Enter your OpenRouter API Key and select a model that supports embeddings.
 
 ### Gemini
 
-填入 Google API Key，选择 `text-embedding-004` 等模型。
+Enter your Google API Key and select a model such as `text-embedding-004`.
 
-### 通用 OpenAI 兼容接口
+### Generic OpenAI-Compatible Endpoint
 
-填入 Base URL 和可选的 API Key，适用于 DeepSeek、硅基流动、通义千问等任意兼容 OpenAI 格式的嵌入接口。
-
----
-
-## AI 问答配置
-
-AI 问答是可选功能，需要额外配置一个聊天模型（与嵌入 Provider 可以不同）。
-
-支持：Ollama（本地聊天模型）、OpenAI、OpenRouter、Gemini、通用兼容接口。
-
-> AI 问答只使用向量检索到的笔记片段作为上下文，不引入任何笔记以外的信息。所有来源笔记均显示在回答下方。
+Enter a Base URL and optional API Key. Works with DeepSeek, SiliconFlow, Qwen, or any OpenAI-format-compatible embedding endpoint.
 
 ---
 
-## 隐私说明
+## Re-ranking Configuration (Optional)
 
-- 所有 API Key 以明文存储在 Obsidian 插件数据文件中（`.obsidian/plugins/tacit/data.json`），请勿将此文件同步到公开仓库
-- 使用云端 Provider 时，笔记文本片段会发送至对应服务商的 API；使用 Ollama 时，数据完全留在本机
-- 向量索引文件（`index.bin`、`index.meta.json`、`build-state.json`）默认保存在插件目录，**不会**随 Vault 同步
+Re-ranking is an optional enhancement layer on top of vector retrieval: the embedding index quickly recalls candidate notes, then a dedicated Reranker model precisely scores and re-orders the candidates for significantly improved relevance. Enabling this adds one extra API call per query.
+
+Enable it in Plugin Settings → **Re-ranking (Optional)** and choose a provider:
+
+### Jina Reranker
+
+1. Sign up and get an API Key at [jina.ai](https://jina.ai)
+2. In plugin settings, select Service → **Jina Reranker** and enter your API Key
+3. Recommended model: `jina-reranker-v2-base-multilingual` (excellent for both Chinese and English)
+
+### Cohere Rerank
+
+1. Sign up and get an API Key at [cohere.com](https://cohere.com)
+2. In plugin settings, select Service → **Cohere Rerank** and enter your API Key
+3. Recommended model: `rerank-v3.5`
+
+> Re-ranking only affects the Related Notes Panel and Active Search results — it does not affect embedding generation or storage.
 
 ---
 
-## 开发
+## AI Q&A Configuration
+
+AI Q&A is an optional feature requiring an additional chat model (which can differ from the embedding provider).
+
+Supports: Ollama (local chat models), OpenAI, OpenRouter, Gemini, and generic compatible endpoints.
+
+> AI Q&A uses only note excerpts retrieved via vector search as context — no information outside your vault is introduced. All source notes are displayed below the answer.
+
+---
+
+## Privacy
+
+- All API Keys are stored in plaintext in the Obsidian plugin data file (`.obsidian/plugins/tacit/data.json`) — do not sync this file to a public repository
+- When using cloud providers, note text excerpts are sent to the respective provider's API; when using Ollama, data stays entirely on your machine
+- Vector index files (`index.bin`, `index.meta.json`, `build-state.json`) are saved in the plugin directory by default and **will not** sync with your Vault
+
+---
+
+## Development
 
 ```bash
 git clone https://github.com/nirodu/tacit
 cd tacit
 npm install
 
-# 开发模式（热重载）
+# Development mode (hot reload)
 npm run dev
 
-# 生产构建
+# Production build
 npm run build
 ```
 
-将插件目录软链接或复制到 `<你的Vault>/.obsidian/plugins/tacit/`，配合 Obsidian 社区插件 [Hot-Reload](https://github.com/pjeby/hot-reload) 可实现保存即刷新。
+Symlink or copy the plugin directory to `<your-vault>/.obsidian/plugins/tacit/`. Combined with the [Hot-Reload](https://github.com/pjeby/hot-reload) community plugin, changes will reload automatically on save.
 
-构建产物输出至 `dist/`。
+Build output goes to `dist/`.
 
 ---
 
-## 协议
+## License
 
-本项目采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 协议：
+This project is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/):
 
-- **署名**：使用或修改本项目，必须注明原作者（nirodu）及来源仓库
-- **非商业**：不可用于商业目的
-- **相同方式共享**：基于本项目的衍生作品必须使用相同协议发布
+- **Attribution**: Any use or modification must credit the original author (nirodu) and link to the source repository
+- **NonCommercial**: May not be used for commercial purposes
+- **ShareAlike**: Derivative works must be released under the same license
 
 Copyright (c) 2024 nirodu &lt;nirodu1219@outlook.com&gt;
