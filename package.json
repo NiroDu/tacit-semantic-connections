@@ -1,0 +1,27 @@
+{
+  "name": "tacit",
+  "version": "0.1.0",
+  "description": "Semantic note connections with tacit knowledge at the core — passive Related Notes + Find, local Ollama first. It also supports third-party AI providers.",
+  "author": {
+    "name": "nirodu",
+    "email": "nirodu1219@outlook.com"
+  },
+  "license": "CC-BY-NC-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nirodu/tacit"
+  },
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "obsidian": "latest",
+    "esbuild": "^0.21.0",
+    "typescript": "^5.4.0",
+    "@types/node": "^20",
+    "vitest": "^1.6.0",
+    "builtin-modules": "^3.3.0"
+  }
+}

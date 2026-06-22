@@ -1,0 +1,10 @@
+{
+  "id": "tacit",
+  "name": "Tacit — Semantic Connections",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Semantic note connections with tacit knowledge at the core: passive Related Notes + Find, local Ollama first, with OpenAI/OpenRouter/Gemini support, plus indexing of Canvas text cards.",
+  "author": "nirodu",
+  "authorUrl": "https://github.com/nirodu",
+  "isDesktopOnly": false
+}
