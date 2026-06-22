@@ -41,6 +41,11 @@ jobs:
             cp CHANGELOG.md release-notes.md
           fi
 
+      - name: Package zip
+        run: |
+          cd dist
+          zip ../tacit.zip main.js manifest.json styles.css
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -48,4 +53,5 @@ jobs:
             dist/main.js
             dist/manifest.json
             dist/styles.css
+            tacit.zip
           body_path: release-notes.md
