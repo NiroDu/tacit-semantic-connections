@@ -198,6 +198,35 @@ export class Indexer {
     this.isStopping = true;
   }
 
+  /**
+   * Copy index files from the old storage location to the new one.
+   * Called when the user toggles storageInVault — avoids a full rebuild.
+   * Returns true if any files were copied.
+   */
+  async migrateIndexStorage(toVault: boolean): Promise<boolean> {
+    const fromDir = toVault ? ".obsidian/plugins/tacit" : ".tacit";
+    const toDir   = toVault ? ".tacit"                  : ".obsidian/plugins/tacit";
+    const adapter  = this.app.vault.adapter;
+    const files    = ["build-state.json", "index.meta.json", "index.bin"];
+
+    const exists = await Promise.all(files.map(f => adapter.exists(`${fromDir}/${f}`)));
+    if (!exists.some(Boolean)) return false;
+
+    if (!await adapter.exists(toDir)) await adapter.mkdir(toDir);
+
+    for (let i = 0; i < files.length; i++) {
+      if (!exists[i]) continue;
+      const src  = `${fromDir}/${files[i]}`;
+      const dest = `${toDir}/${files[i]}`;
+      if (files[i] === "index.bin") {
+        await adapter.writeBinary(dest, await adapter.readBinary(src));
+      } else {
+        await adapter.write(dest, await adapter.read(src));
+      }
+    }
+    return true;
+  }
+
   /** File paths that have at least one chunk in error state */
   getFailedFiles(): string[] {
     return Object.entries(this.buildState.files)
