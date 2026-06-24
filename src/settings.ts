@@ -78,7 +78,7 @@ export const DEFAULT_SETTINGS: TacitSettings = {
   chunkSize: 500,
   chunkOverlap: 60,
   concurrency: 3,
-  storageInVault: false,
+  storageInVault: true,
 
   resultCount: 8,
   snippetLines: 2,
@@ -576,9 +576,16 @@ export class TacitSettingTab extends PluginSettingTab {
 
     new Setting(advEl)
       .setName("将索引存储在 Vault 内")
-      .setDesc("存储在 Vault 的 .tacit/ 目录（方便跨设备同步）。注意：关闭后数据留在 .tacit/ 需手动删除。默认关闭时索引存在插件目录，删除插件时会一并清理。")
+      .setDesc("存储在 Vault 的 .tacit/ 目录，方便跨设备同步（默认开启）。切换时已有索引文件会自动迁移，无需重新索引。关闭后索引存在插件目录，删除插件时会一并清理。")
       .addToggle(t => t.setValue(s.storageInVault).onChange(async v => {
-        s.storageInVault = v; await this.plugin.saveSettings();
+        try {
+          const moved = await this.plugin.indexer?.migrateIndexStorage(v);
+          if (moved) new Notice("Tacit：索引文件已迁移，无需重新索引。");
+        } catch (e) {
+          new Notice("Tacit：迁移索引文件时出错，下次启动时将自动重建。");
+        }
+        s.storageInVault = v;
+        await this.plugin.saveSettings();
       }));
   }
 
