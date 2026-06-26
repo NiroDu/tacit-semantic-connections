@@ -626,6 +626,7 @@ export class Indexer {
     if (!(file instanceof TFile)) return;
     if (file.extension !== "md" && file.extension !== "canvas") return;
     if (this.isExcluded(file.path)) return;
+    if (!this.plugin.settings.liveIndexing) return;
 
     const t = this.modifyTimers.get(file.path);
     if (t) clearTimeout(t);
@@ -633,6 +634,13 @@ export class Indexer {
       this.modifyTimers.delete(file.path);
       const existing = this.buildState.files[file.path];
       if (existing && existing.mtime === file.stat.mtime) return; // no real change
+
+      const minChars = this.plugin.settings.liveIndexingMinChars;
+      if (minChars > 0) {
+        const content = await this.app.vault.cachedRead(file);
+        if (content.length < minChars) return;
+      }
+
       this.fileQueue.push({ filePath: file.path, mtime: file.stat.mtime });
       if (!this.isRunning) this.processFileQueue();
     }, 2000));

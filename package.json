@@ -1,6 +1,6 @@
 {
   "name": "tacit",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Semantic note connections with tacit knowledge at the core — passive Related Notes + Find, local Ollama first. It also supports third-party AI providers.",
   "author": {
     "name": "nirodu",

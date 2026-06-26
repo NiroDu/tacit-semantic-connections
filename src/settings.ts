@@ -35,6 +35,8 @@ export interface TacitSettings {
   chunkOverlap: number;
   concurrency: number;
   storageInVault: boolean;
+  liveIndexing: boolean;
+  liveIndexingMinChars: number;
 
   // Related Notes
   resultCount: number;
@@ -79,6 +81,8 @@ export const DEFAULT_SETTINGS: TacitSettings = {
   chunkOverlap: 60,
   concurrency: 3,
   storageInVault: true,
+  liveIndexing: false,
+  liveIndexingMinChars: 200,
 
   resultCount: 8,
   snippetLines: 2,
@@ -548,6 +552,28 @@ export class TacitSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         })
       );
+
+    // ── Live indexing ─────────────────────────────────────────
+    new Setting(el)
+      .setName("编辑时自动更新索引")
+      .setDesc("开启后，编辑笔记时会自动触发索引更新。默认关闭，仅在重启 Obsidian 时检查新内容。")
+      .addToggle(t => t.setValue(s.liveIndexing).onChange(async v => {
+        s.liveIndexing = v;
+        await this.plugin.saveSettings();
+        this.display();
+      }));
+
+    if (s.liveIndexing) {
+      new Setting(el)
+        .setName("最低字数阈值")
+        .setDesc("笔记字数低于此值时不触发索引，避免对草稿频繁请求。")
+        .addSlider(sl => sl
+          .setLimits(0, 2000, 50)
+          .setValue(s.liveIndexingMinChars)
+          .onChange(async v => { s.liveIndexingMinChars = v; await this.plugin.saveSettings(); })
+          .setDynamicTooltip()
+        );
+    }
 
     // Advanced settings — collapsible with prominent heading
     const advDetails = el.createEl("details", { cls: "tacit-adv-details" });
